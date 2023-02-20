@@ -1,38 +1,24 @@
 {
   "name": "be-nc-games",
   "version": "1.0.0",
-  "description": "bc-nc-games",
+  "description": "## Background",
   "main": "index.js",
   "scripts": {
-    "setup-dbs": "psql -f ./db/setup.sql",
-    "seed": "node ./db/seeds/run-seed.js",
-    "test": "jest",
-    "prepare": "husky install"
+    "test": "psql -f setup.sql && jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/northcoders/be-nc-games.git"
+    "url": "git+https://github.com/Williamlee371/Be-Games-Project.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/northcoders/be-nc-games/issues"
+    "url": "https://github.com/Williamlee371/Be-Games-Project/issues"
   },
-  "homepage": "https://github.com/northcoders/be-nc-games#readme",
+  "homepage": "https://github.com/Williamlee371/Be-Games-Project#readme",
   "dependencies": {
-    "dotenv": "^16.0.0",
-    "pg": "^8.7.3",
-  },
-  "devDependencies": {
-    "husky": "^8.0.2",
-    "jest": "^27.5.1",
-    "jest-extended": "^2.0.0",
-    "pg-format": "^1.0.4"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ]
+    "express": "^4.18.2",
+    "supertest": "^6.3.3"
   }
 }
