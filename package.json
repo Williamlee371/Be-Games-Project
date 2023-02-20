@@ -21,7 +21,11 @@
   },
   "homepage": "https://github.com/Williamlee371/Be-Games-Project#readme",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "husky": "^8.0.3",
+    "pg": "^8.9.0",
+    "pg-format": "^1.0.4",
     "supertest": "^6.3.3"
   }
 }
