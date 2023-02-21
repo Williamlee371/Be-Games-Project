@@ -1,0 +1,41 @@
+const app = require("../app");
+const request = require("supertest");
+const db = require("../db/connection");
+const seed = require("../db/seeds/seed");
+const testData = require("../db/data/test-data/index");
+
+beforeEach(() => {
+	return seed(testData);
+});
+
+afterAll(() => {
+	db.end();
+});
+
+describe("Get", () => {
+	describe("api/categories", () => {
+		test("200-responses with an array of objects", () => {
+			return request(app)
+				.get("/api/categories")
+				.expect(200)
+				.then((result) => {
+					expect(result.body.length).toBe(4);
+					result.body.forEach((categories) => {
+						expect(categories).toHaveProperty("slug");
+						expect(categories).toHaveProperty("description");
+					});
+				});
+		});
+	});
+});
+
+describe("Error handling", () => {
+	test("404-responses with a error if the user input is incorrect", () => {
+		return request(app)
+			.get("/api/categorie")
+			.expect(404)
+			.then((result) => {
+				expect(result.body.msg).toEqual("not found");
+			});
+	});
+});
