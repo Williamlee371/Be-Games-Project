@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
-const { getCategories } = require("./controllers/controllers");
+const { getCategories, getReviews } = require("./controllers/controllers");
 
 app.get("/api/categories", getCategories);
 
+app.get("/api/reviews", getReviews);
+
 app.use("*", (request, response, next) => {
-    response.status(404).send({ msg: "not found" });
+	response.status(404).send({ msg: "not found" });
 });
 app.use((error, request, response, next) => {
-	console.log(error);
+	response.status(500).send({msg:'server error'})
 });
 module.exports = app;

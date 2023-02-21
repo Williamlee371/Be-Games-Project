@@ -3,6 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
+require('jest-sorted');
 
 beforeEach(() => {
 	return seed(testData);
@@ -26,6 +27,42 @@ describe("Get", () => {
 							description: expect.any(String),
 						});
 					});
+				});
+		});
+	});
+	describe("api/reviews", () => {
+		test("200-responses with an array of objects", () => {
+			return request(app)
+				.get("/api/reviews")
+				.expect(200)
+				.then(({ body }) => {
+					expect(body["reviews"].length).toBe(13);
+					body["reviews"].forEach((reviews) => {
+						expect(reviews).toMatchObject({
+							owner: expect.any(String),
+							title: expect.any(String),
+							review_id: expect.any(Number),
+							category: expect.any(String),
+							created_at: expect.any(String),
+							votes: expect.any(Number),
+							designer: expect.any(String),
+							comment_count: expect.any(Number),
+						});
+					});
+				});
+		});
+		test("200-reviews should be sorted by date descending order",()=>{
+			return request(app).get('/api/reviews').expect(200).then(({body})=>{
+				const reviews=body.reviews
+				expect(reviews).toBeSortedBy('created_at',{descending:true,coerce:false})
+			})
+		});
+		test("200-each object has comment_count (worked out from the reviews and comments table)", () => {
+			return request(app)
+				.get("/api/reviews")
+				.expect(200)
+				.then(({ body }) => {
+					expect(body["reviews"][7].comment_count).toEqual(3);
 				});
 		});
 	});

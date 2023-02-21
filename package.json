@@ -28,5 +28,8 @@
     "pg": "^8.9.0",
     "pg-format": "^1.0.4",
     "supertest": "^6.3.3"
+  },
+  "devDependencies": {
+    "jest-sorted": "^1.0.14"
   }
 }
