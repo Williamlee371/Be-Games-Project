@@ -18,9 +18,9 @@ describe("Get", () => {
 			return request(app)
 				.get("/api/categories")
 				.expect(200)
-				.then((result) => {
-					expect(result.body.length).toBe(4);
-					result.body.forEach((categories) => {
+				.then(({body}) => {
+					expect(body['categories'].length).toBe(4);
+					body['categories'].forEach((categories) => {
 						expect(categories).toHaveProperty("slug");
 						expect(categories).toHaveProperty("description");
 					});
