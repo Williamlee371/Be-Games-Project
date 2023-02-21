@@ -21,7 +21,6 @@ describe("Get", () => {
 				.then(({ body }) => {
 					expect(body["categories"].length).toBe(4);
 					body["categories"].forEach((categories) => {
-						console.log(categories);
 						expect(categories).toMatchObject({
 							slug: expect.any(String),
 							description: expect.any(String),
