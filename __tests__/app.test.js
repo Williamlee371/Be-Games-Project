@@ -18,11 +18,14 @@ describe("Get", () => {
 			return request(app)
 				.get("/api/categories")
 				.expect(200)
-				.then(({body}) => {
-					expect(body['categories'].length).toBe(4);
-					body['categories'].forEach((categories) => {
-						expect(categories).toHaveProperty("slug");
-						expect(categories).toHaveProperty("description");
+				.then(({ body }) => {
+					expect(body["categories"].length).toBe(4);
+					body["categories"].forEach((categories) => {
+						console.log(categories);
+						expect(categories).toMatchObject({
+							slug: expect.any(String),
+							description: expect.any(String),
+						});
 					});
 				});
 		});
