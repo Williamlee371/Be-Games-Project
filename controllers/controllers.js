@@ -1,9 +1,11 @@
 const { commentData } = require("../db/data/test-data");
 const comments = require("../db/data/test-data/comments");
-const { fetchCategories, fetchReviews,fetchComments } = require("../models/models");
+const format=require('pg-format');
+const { fetchData } = require("../models/models");
 
 exports.getCategories = (request, response, next) => {
-	fetchCategories()
+	const queryString=format('SELECT * FROM categories')
+	fetchData(queryString)
 		.then((categories) => {
 			response.status(200).send({ categories });
 		})
@@ -12,9 +14,11 @@ exports.getCategories = (request, response, next) => {
 		});
 };
 exports.getReviews = (request, response, next) => {
-	fetchReviews()
+	const queryStringReviews=format('SELECT * FROM reviews ORDER BY created_at DESC')
+	fetchData(queryStringReviews)
 		.then((reviews) => {
-            fetchComments().then((comments)=>{
+			const queryStringComments=format('SELECT * FROM comments')
+            fetchData(queryStringComments).then((comments)=>{
                 let commentCount=0
                 reviews.forEach((review)=>{
                     comments.forEach((comment)=>{
