@@ -3,7 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
-require('jest-sorted');
+require("jest-sorted");
 
 beforeEach(() => {
 	return seed(testData);
@@ -51,11 +51,17 @@ describe("Get", () => {
 					});
 				});
 		});
-		test("200-reviews should be sorted by date descending order",()=>{
-			return request(app).get('/api/reviews').expect(200).then(({body})=>{
-				const reviews=body.reviews
-				expect(reviews).toBeSortedBy('created_at',{descending:true,coerce:false})
-			})
+		test("200-reviews should be sorted by date descending order", () => {
+			return request(app)
+				.get("/api/reviews")
+				.expect(200)
+				.then(({ body }) => {
+					const reviews = body.reviews;
+					expect(reviews).toBeSortedBy("created_at", {
+						descending: true,
+						coerce: false,
+					});
+				});
 		});
 		test("200-each object has comment_count (worked out from the reviews and comments table)", () => {
 			return request(app)
@@ -65,6 +71,40 @@ describe("Get", () => {
 					expect(body["reviews"][7].comment_count).toEqual(3);
 				});
 		});
+	});
+	describe("api/reviews/:review_id", () => {
+		test("200-responses with a array with a single object", () => {
+			return request(app)
+				.get("/api/reviews/1")
+				.expect(200)
+				.then(({ body }) => {
+					expect(body["review"].length).toBe(1);
+					body["review"].forEach((review) => {
+						expect(review).toMatchObject({
+							review_id: expect.any(Number),
+							title: expect.any(String),
+							review_body: expect.any(String),
+							designer: expect.any(String),
+							votes: expect.any(Number),
+							category: expect.any(String),
+							owner: expect.any(String),
+							created_at: expect.any(String),
+						});
+					});
+				});
+		});
+		test('200-responses with the correct item',()=>{
+			return request(app).get('/api/reviews/1').expect(200).then(({body})=>{
+				body['review'].forEach((review)=>{
+					expect(review.review_id).toBe(1)
+				})
+			})
+		})
+		test('200-responses with an empty array if input a id that doesnt exist',()=>{
+			return request(app).get('/api/reviews/100').expect(200).then(({body})=>{
+				expect(body['review']).toEqual([])
+			})
+		})
 	});
 });
 
