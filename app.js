@@ -7,7 +7,7 @@ const {
 const {
 	getReviews,
 	getReviewsById,
-}=require('./controllers/ReviewsControllers')
+}=require('./controllers/reviewsControllers')
 
 app.get("/api/categories", getCategories);
 
