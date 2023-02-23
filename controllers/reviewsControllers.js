@@ -1,6 +1,6 @@
 const format = require("pg-format");
 const {fetchData}=require('../models/models')
-const { fetchReviewsById } = require("../models/reviewsModels.js");
+const { fetchReviewsById,  } = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
 	const queryStringReviews = format(
@@ -37,3 +37,18 @@ exports.getReviewsById = (request, response, next) => {
 			next(error);
 		});
 };
+
+exports.getCommentsByReview=(request,response,next)=>{
+	const {review_id}=request.params
+	const queryStringComments=format('SELECT * FROM comments ORDER BY created_at DESC')
+	fetchData(queryStringComments).then((comments)=>{
+		const newArr=[]
+		comments.forEach((comment)=>{
+			if(comment['review_id']===parseInt(review_id)){
+				newArr.push(comment)
+			}
+		})
+		response.status(200).send({comments:newArr})
+	})
+}
+ 
