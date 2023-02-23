@@ -79,14 +79,14 @@ describe("Get", () => {
 				.expect(200)
 				.then(({ body }) => {
 						expect(body['review']).toMatchObject({
-							review_id: expect.any(Number),
-							title: expect.any(String),
-							review_body: expect.any(String),
-							designer: expect.any(String),
-							votes: expect.any(Number),
-							category: expect.any(String),
-							owner: expect.any(String),
-							created_at: expect.any(String),
+							review_id: 1,
+							title: 'Agricola',
+							review_body: 'Farmyard fun!',
+							designer: 'Uwe Rosenberg',
+							votes: 1,
+							category: 'euro game',
+							owner: 'mallionaire',
+							created_at: '2021-01-18T10:00:20.514Z',
 						});
 				});
 		});
@@ -95,11 +95,7 @@ describe("Get", () => {
 					expect(body['review'].review_id).toBe(1)
 			})
 		})
-		test('200-responses with an empty array if input a id that doesnt exist',()=>{
-			return request(app).get('/api/reviews/100').expect(200).then(({body})=>{
-				expect(body['review']).toEqual(undefined)
-			})
-		})
+
 	});
 });
 
@@ -112,6 +108,11 @@ describe("Error handling", () => {
 				expect(body.msg).toEqual("not found");
 			});
 	});
+	test('404-responses with an error if a user doesnt input a exsiting it',()=>{
+			return request(app).get('/api/reviews/100').expect(404).then(({body})=>{
+				expect(body.msg).toEqual('non-existant id')
+			})
+	})
 	test('400-responses with an error if the user input is not an id',()=>{
 		return request(app).get('/api/reviews/notanid').expect(400).then(({body})=>{
 			expect(body.msg).toEqual('bad request')
