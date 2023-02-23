@@ -1,18 +1,6 @@
-const { commentData } = require("../db/data/test-data");
-const comments = require("../db/data/test-data/comments");
 const format = require("pg-format");
-const { fetchData, fetchReviewsById } = require("../models/models");
-
-exports.getCategories = (request, response, next) => {
-	const queryString = format("SELECT * FROM categories;");
-	fetchData(queryString)
-		.then((categories) => {
-			response.status(200).send({ categories });
-		})
-		.catch((error) => {
-			next(error);
-		});
-};
+const {fetchData}=require('../models/models')
+const { fetchReviewsById } = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
 	const queryStringReviews = format(

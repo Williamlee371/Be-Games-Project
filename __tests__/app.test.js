@@ -73,14 +73,12 @@ describe("Get", () => {
 		});
 	});
 	describe("api/reviews/:review_id", () => {
-		test("200-responses with a array with a single object", () => {
+		test("200-responses with a single object", () => {
 			return request(app)
 				.get("/api/reviews/1")
 				.expect(200)
 				.then(({ body }) => {
-					expect(body["review"].length).toBe(1);
-					body["review"].forEach((review) => {
-						expect(review).toMatchObject({
+						expect(body['review']).toMatchObject({
 							review_id: expect.any(Number),
 							title: expect.any(String),
 							review_body: expect.any(String),
@@ -90,19 +88,16 @@ describe("Get", () => {
 							owner: expect.any(String),
 							created_at: expect.any(String),
 						});
-					});
 				});
 		});
 		test('200-responses with the correct item',()=>{
 			return request(app).get('/api/reviews/1').expect(200).then(({body})=>{
-				body['review'].forEach((review)=>{
-					expect(review.review_id).toBe(1)
-				})
+					expect(body['review'].review_id).toBe(1)
 			})
 		})
 		test('200-responses with an empty array if input a id that doesnt exist',()=>{
 			return request(app).get('/api/reviews/100').expect(200).then(({body})=>{
-				expect(body['review']).toEqual([])
+				expect(body['review']).toEqual(undefined)
 			})
 		})
 	});
@@ -113,8 +108,13 @@ describe("Error handling", () => {
 		return request(app)
 			.get("/api/categorie")
 			.expect(404)
-			.then((result) => {
-				expect(result.body.msg).toEqual("not found");
+			.then(({body}) => {
+				expect(body.msg).toEqual("not found");
 			});
 	});
+	test('400-responses with an error if the user input is not an id',()=>{
+		return request(app).get('/api/reviews/notanid').expect(400).then(({body})=>{
+			expect(body.msg).toEqual('bad request')
+		})
+	})
 });
