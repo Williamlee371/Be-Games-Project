@@ -130,6 +130,14 @@ describe("Get", () => {
 					});
 				});
 		});
+		test("200-responses with an empty array of comments if given valid by no existant id", () => {
+			return request(app)
+				.get("/api/reviews/1/comments")
+				.expect(200)
+				.then(({ body }) => {
+					expect(body["comments"]).toEqual([]);
+				});
+		});
 	});
 });
 
@@ -142,9 +150,17 @@ describe("Error handling", () => {
 				expect(body.msg).toEqual("not found");
 			});
 	});
-	test("404-responses with an error if a user doesnt input a exsiting it", () => {
+	test("404-responses with an error if a user doesnt input a exsiting id", () => {
 		return request(app)
 			.get("/api/reviews/100")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toEqual("non-existant id");
+			});
+	});
+	test("404-responses with an error if the user inputs a non-exsiting id (comments)", () => {
+		return request(app)
+			.get("/api/reviews/100/comments")
 			.expect(404)
 			.then(({ body }) => {
 				expect(body.msg).toEqual("non-existant id");
@@ -153,6 +169,14 @@ describe("Error handling", () => {
 	test("400-responses with an error if the user input is not an id", () => {
 		return request(app)
 			.get("/api/reviews/notanid")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toEqual("bad request");
+			});
+	});
+	test("400-responses with an error if a user input isnt a id (comments)", () => {
+		return request(app)
+			.get("/api/reviews/noanid/comments")
 			.expect(400)
 			.then(({ body }) => {
 				expect(body.msg).toEqual("bad request");
