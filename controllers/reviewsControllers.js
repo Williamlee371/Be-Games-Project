@@ -1,15 +1,16 @@
 const format = require("pg-format");
-const {fetchData}=require('../models/models')
-const { fetchReviewsById } = require("../models/reviewsModels.js");
+const { fetchData } = require("../models/models");
+const {
+	fetchReviewsById,
+	fetchCommentsByReviews,
+} = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
-	const queryStringReviews = format(
-		"SELECT * FROM reviews ORDER BY created_at DESC;"
-	);
-	fetchData(queryStringReviews)
+	queryStrReviews='reviews'
+	fetchData(queryStrReviews,'created_at','DESC')
 		.then((reviews) => {
-			const queryStringComments = format("SELECT * FROM comments;");
-			fetchData(queryStringComments).then((comments) => {
+			const queryStrComments = 'comments';
+			fetchData(queryStrComments).then((comments) => {
 				let commentCount = 0;
 				reviews.forEach((review) => {
 					comments.forEach((comment) => {
@@ -28,10 +29,21 @@ exports.getReviews = (request, response, next) => {
 };
 
 exports.getReviewsById = (request, response, next) => {
-	const {review_id} = request.params;
+	const { review_id } = request.params;
 	fetchReviewsById(review_id)
 		.then((review) => {
 			response.status(200).send({ review });
+		})
+		.catch((error) => {
+			next(error);
+		});
+};
+
+exports.getCommentsByReview = (request, response, next) => {
+	const { review_id } = request.params;
+	fetchCommentsByReviews(review_id)
+		.then((comments) => {
+			response.status(200).send({ comments });
 		})
 		.catch((error) => {
 			next(error);
