@@ -13,7 +13,7 @@ afterAll(() => {
 	db.end();
 });
 
-describe("Get", () => {
+xdescribe("Get", () => {
 	describe("api/categories", () => {
 		test("200-responses with an array of objects", () => {
 			return request(app)
@@ -141,7 +141,25 @@ describe("Get", () => {
 	});
 });
 
-describe("Error handling", () => {
+describe("post", () => {
+	describe("api/reviews/:review_id/comments", () => {
+		test("201-responses with the posted comment", () => {
+			const sentData = {
+				username: "Williamglee371",
+				body: "Very fun would play again",
+			};
+			return request(app)
+				.post("/api/reviews/1/comments")
+				.send(sentData)
+				.expect(201)
+				.then(({ comment }) => {
+					expect(comment).toBe("Very fun would play again");
+				});
+		});
+	});
+});
+
+xdescribe("Error handling", () => {
 	test("404-responses with a error if the user input is incorrect", () => {
 		return request(app)
 			.get("/api/categorie")

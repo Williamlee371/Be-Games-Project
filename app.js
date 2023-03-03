@@ -1,14 +1,15 @@
 const { response, request } = require("express");
 const express = require("express");
 const app = express();
-const {
-	getCategories,
-} = require("./controllers/categoriesControllers");
+const { getCategories } = require("./controllers/categoriesControllers");
 const {
 	getReviews,
 	getReviewsById,
 	getCommentsByReview,
-}=require('./controllers/reviewsControllers')
+	postComment,
+} = require("./controllers/reviewsControllers");
+
+app.use(express.json())
 
 app.get("/api/categories", getCategories);
 
@@ -16,21 +17,23 @@ app.get("/api/reviews", getReviews);
 
 app.get("/api/reviews/:review_id", getReviewsById);
 
-app.get("/api/reviews/:review_id/comments",getCommentsByReview);
+app.get("/api/reviews/:review_id/comments", getCommentsByReview);
 
-app.use((error,request,response,next)=>{
-	if(error.status&&error.msg){
-		response.status(error.status).send({msg:error.msg})
-	}else{
-		next(error);
-	}
-})
+app.post("/api/reviews/:review_id/comments", postComment);
 
 app.use((error, request, response, next) => {
-	if(error.code='22P02'){
+	if (error.status && error.msg) {
+		response.status(error.status).send({ msg: error.msg });
+	} else {
+		next(error);
+	}
+});
+
+app.use((error, request, response, next) => {
+	if ((error.code = "22P02")) {
 		response.status(400).send({ msg: "bad request" });
-	}else{
-		next(error)
+	} else {
+		next(error);
 	}
 });
 
@@ -41,4 +44,5 @@ app.use((error, request, response, next) => {
 app.use("*", (request, response, next) => {
 	response.status(404).send({ msg: "not found" });
 });
+
 module.exports = app;

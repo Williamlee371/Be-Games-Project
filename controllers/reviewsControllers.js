@@ -1,4 +1,3 @@
-const format = require("pg-format");
 const { fetchData } = require("../models/models");
 const {
 	fetchReviewsById,
@@ -6,10 +5,10 @@ const {
 } = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
-	queryStrReviews='reviews'
-	fetchData(queryStrReviews,'created_at','DESC')
+	queryStrReviews = "reviews";
+	fetchData(queryStrReviews, "created_at", "DESC")
 		.then((reviews) => {
-			const queryStrComments = 'comments';
+			const queryStrComments = "comments";
 			fetchData(queryStrComments).then((comments) => {
 				let commentCount = 0;
 				reviews.forEach((review) => {
@@ -48,4 +47,8 @@ exports.getCommentsByReview = (request, response, next) => {
 		.catch((error) => {
 			next(error);
 		});
+};
+
+exports.postComment = (request, response) => {
+	console.log(request.body);
 };
