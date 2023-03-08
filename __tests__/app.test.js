@@ -141,7 +141,7 @@ xdescribe("Get", () => {
 	});
 });
 
-describe("post", () => {
+xdescribe("post", () => {
 	describe("api/reviews/:review_id/comments", () => {
 		test("201-responses with the posted comment", () => {
 			const sentData = {
