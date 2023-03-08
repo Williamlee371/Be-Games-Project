@@ -13,7 +13,7 @@ afterAll(() => {
 	db.end();
 });
 
-xdescribe("Get", () => {
+describe("Get", () => {
 	describe("api/categories", () => {
 		test("200-responses with an array of objects", () => {
 			return request(app)
@@ -159,7 +159,7 @@ xdescribe("post", () => {
 	});
 });
 
-xdescribe("Error handling", () => {
+describe("Error handling", () => {
 	test("404-responses with a error if the user input is incorrect", () => {
 		return request(app)
 			.get("/api/categorie")
