@@ -141,19 +141,19 @@ describe("Get", () => {
 	});
 });
 
-xdescribe("post", () => {
+describe("post", () => {
 	describe("api/reviews/:review_id/comments", () => {
 		test("201-responses with the posted comment", () => {
 			const sentData = {
-				username: "Williamglee371",
+				username: "mallionaire",
 				body: "Very fun would play again",
 			};
 			return request(app)
 				.post("/api/reviews/1/comments")
 				.send(sentData)
 				.expect(201)
-				.then(({ comment }) => {
-					expect(comment).toBe("Very fun would play again");
+				.then(({ body }) => {
+					expect(body.body).toBe("Very fun would play again");
 				});
 		});
 	});
@@ -182,6 +182,19 @@ describe("Error handling", () => {
 			.expect(404)
 			.then(({ body }) => {
 				expect(body.msg).toEqual("non-existant id");
+			});
+	});
+	test("400-responses with an error if the user inputs an incorrect", () => {
+		const sentData = {
+			username: "williaglee371",
+			body: "Very fun would play again",
+		};
+		return request(app)
+			.post("/api/reviews/1/comments")
+			.send(sentData)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toEqual("bad request");
 			});
 	});
 	test("400-responses with an error if the user input is not an id", () => {

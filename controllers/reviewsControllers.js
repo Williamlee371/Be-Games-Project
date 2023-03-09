@@ -2,6 +2,7 @@ const { fetchData } = require("../models/models");
 const {
 	fetchReviewsById,
 	fetchCommentsByReviews,
+	addNewComment,
 } = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
@@ -49,6 +50,12 @@ exports.getCommentsByReview = (request, response, next) => {
 		});
 };
 
-exports.postComment = (request, response) => {
-	console.log(request.body);
+exports.postComment = (request, response,next) => {
+	const {review_id}=request.params
+	const data=request.body
+	addNewComment(review_id,data).then((comment)=>{
+		response.status(201).send(comment[0])
+	}).catch((error)=>{
+		next(error);
+	})
 };
