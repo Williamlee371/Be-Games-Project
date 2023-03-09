@@ -3,6 +3,7 @@ const {
 	fetchReviewsById,
 	fetchCommentsByReviews,
 	addNewComment,
+	incrementVotes,
 } = require("../models/reviewsModels.js");
 
 exports.getReviews = (request, response, next) => {
@@ -50,12 +51,26 @@ exports.getCommentsByReview = (request, response, next) => {
 		});
 };
 
-exports.postComment = (request, response,next) => {
-	const {review_id}=request.params
-	const data=request.body
-	addNewComment(review_id,data).then((comment)=>{
-		response.status(201).send(comment[0])
-	}).catch((error)=>{
-		next(error);
-	})
+exports.postComment = (request, response, next) => {
+	const { review_id } = request.params;
+	const data = request.body;
+	addNewComment(review_id, data)
+		.then((comment) => {
+			response.status(201).send(comment[0]);
+		})
+		.catch((error) => {
+			next(error);
+		});
+};
+
+exports.patchvotes = (request, response, next) => {
+	const { review_id } = request.params;
+	const data = request.body;
+	incrementVotes(review_id, data.inc_votes)
+		.then((body) => {
+			response.status(200).send(body);
+		})
+		.catch((error) => {
+			next(error);
+		});
 };

@@ -159,6 +159,51 @@ describe("post", () => {
 	});
 });
 
+describe("patch", () => {
+	describe("api/reviews/:review_id", () => {
+		test("200-responses with the updated review", () => {
+			const updatedReview = { inc_votes: 1 };
+			return request(app)
+				.patch("/api/reviews/1")
+				.send(updatedReview)
+				.expect(200)
+				.then(({ body }) => {
+					expect(body).toEqual({
+						review_id: 1,
+						title: "Agricola",
+						designer: "Uwe Rosenberg",
+						owner: "mallionaire",
+						review_img_url:
+							"https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700",
+						review_body: "Farmyard fun!",
+						category: "euro game",
+						votes: 2,
+					});
+				});
+		});
+		test("200-works the oposite way", () => {
+			const updatedReview = { inc_votes: -100 };
+			return request(app)
+				.patch("/api/reviews/1")
+				.send(updatedReview)
+				.expect(200)
+				.then(({ body }) => {
+					expect(body).toEqual({
+						review_id: 1,
+						title: "Agricola",
+						designer: "Uwe Rosenberg",
+						owner: "mallionaire",
+						review_img_url:
+							"https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700",
+						review_body: "Farmyard fun!",
+						category: "euro game",
+						votes: -99,
+					});
+				});
+		});
+	});
+});
+
 describe("Error handling", () => {
 	test("404-responses with a error if the user input is incorrect", () => {
 		return request(app)

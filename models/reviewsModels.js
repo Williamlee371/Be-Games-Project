@@ -44,13 +44,39 @@ exports.checkIdExists = (id) => {
 
 exports.addNewComment = (id, data) => {
 	const date = new Date();
-	const dataToInsert=[data.body,id,data.username,0,date]
-	const insertItems=format
-	(`INSERT INTO comments
+	const dataToInsert = [data.body, id, data.username, 0, date];
+	const insertItems = format(
+		`INSERT INTO comments
 		(body,review_id,author,votes,created_at)
 	VALUES
 		%L
 	RETURNING *;`,
-		[dataToInsert])
-	return db.query(insertItems).then((result)=>{return result.rows})
+		[dataToInsert]
+	);
+	return db.query(insertItems).then((result) => {
+		return result.rows;
+	});
+};
+
+exports.incrementVotes = (id, data) => {
+	const selectQuery = format(
+		"SELECT votes FROM reviews WHERE review_id=%L",
+		id
+	);
+	return db.query(selectQuery).then((result) => {
+		const query = format(
+			`UPDATE reviews SET votes=%s WHERE review_id = %L`,
+			data + result.rowCount,
+			id
+		);
+		return db.query(query).then((result) => {
+			const selectQuery2 = format(
+				"SELECT review_id,title,designer,owner,review_img_url,review_body,category,votes FROM reviews WHERE review_id=%L",
+				id
+			);
+			return db.query(selectQuery2).then((result) => {
+				return result.rows[0];
+			});
+		});
+	});
 };
