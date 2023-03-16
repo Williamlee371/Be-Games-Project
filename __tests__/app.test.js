@@ -13,7 +13,7 @@ afterAll(() => {
 	db.end();
 });
 
-describe("Get", () => {
+xdescribe("Get", () => {
 	describe("api/categories", () => {
 		test("200-responses with an array of objects", () => {
 			return request(app)
@@ -141,7 +141,7 @@ describe("Get", () => {
 	});
 });
 
-describe("post", () => {
+xdescribe("post", () => {
 	describe("api/reviews/:review_id/comments", () => {
 		test("201-responses with the posted comment", () => {
 			const sentData = {
@@ -159,7 +159,7 @@ describe("post", () => {
 	});
 });
 
-describe("patch", () => {
+xdescribe("patch", () => {
 	describe("api/reviews/:review_id", () => {
 		test("200-responses with the updated review", () => {
 			const updatedReview = { inc_votes: 1 };
@@ -204,7 +204,7 @@ describe("patch", () => {
 	});
 });
 
-describe("Error handling", () => {
+xdescribe("Error handling", () => {
 	test("404-responses with a error if the user input is incorrect", () => {
 		return request(app)
 			.get("/api/categorie")

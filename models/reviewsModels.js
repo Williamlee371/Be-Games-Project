@@ -71,7 +71,7 @@ exports.incrementVotes = (id, data) => {
 		);
 		return db.query(query).then((result) => {
 			const selectQuery2 = format(
-				"SELECT review_id,title,designer,owner,review_img_url,review_body,category,votes FROM reviews WHERE review_id=%L",
+				"SELECT * FROM reviews WHERE review_id=%L",
 				id
 			);
 			return db.query(selectQuery2).then((result) => {
