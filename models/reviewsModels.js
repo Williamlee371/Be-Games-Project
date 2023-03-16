@@ -66,7 +66,7 @@ exports.incrementVotes = (id, data) => {
 	return db.query(selectQuery).then((result) => {
 		const query = format(
 			`UPDATE reviews SET votes=%s WHERE review_id = %L`,
-			data + result.rowCount,
+			data + result.rows[0].votes,
 			id
 		);
 		return db.query(query).then((result) => {
